@@ -1,0 +1,14 @@
+version: "3"
+services: 
+  api:
+    build:
+      context: ./api/
+    ports: 
+    - 8000:80
+    environment: 
+      - LOG_LEVEL=debug
+  # frontend:
+  #   build:
+  #     context: ./ui/
+  #   ports: 
+  #   - "3000:80"
