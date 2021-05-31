@@ -9,10 +9,35 @@ class PDFProvider {
   createPDF(ModelResults _data) async {
     final pdf = pw.Document();
     var _alternatives = _helper.getAlternatives(_data);
+    var _rawMatrixArray =
+        _helper.getMatrixArray(_data.results.rawMatrix, _alternatives);
     var _normalizedMatrixArray =
         _helper.getMatrixArray(_data.results.normalizedMatrix, _alternatives);
-    // var _weightedMatrixArray =
-    //     _helper.getMatrixArray(_data.results.weightedMatrix, _alternatives);
+    var _normalizedMatrixFilteredArray = _helper.getMatrixArray(
+        _data.results.normalizedMatrixFiltered, _alternatives);
+    var _developmentAttributeArray = _helper.getSeriesArray(
+        _data.results.developmentAttributes,
+        header: ["Alternative", "Value"]);
+    var _shortestDistanceArray = _helper.getSeriesArray(
+        _data.results.shortestDistance.values,
+        header: ["Alternative", "Value"]);
+    var distanceMap = {
+      "Avg Distance": _data.results.shortestDistance.mean,
+      "Std Distance": _data.results.shortestDistance.std
+    };
+    var _distanceMapArray =
+        _helper.getSeriesArray(distanceMap, header: ["Metric", "Value"]);
+    var _acceptedRange = {
+      "Lower Bound": _data.results.acceptedRange[0],
+      "Upper Bound": _data.results.acceptedRange[1]
+    };
+    var _acceptendRangeArray =
+        _helper.getSeriesArray(_acceptedRange, header: ["Bound", "Value"]);
+    var _idealValuesArray = _helper.getSeriesArray(_data.results.idealValues,
+        header: ["Criteria", "Value"]);
+    var _developmentPattern = _helper.getSeriesArray(
+        _data.results.developmentPattern,
+        header: ["Alternative", "Value"]);
     // var _negativeIdealSolution =
     //     _helper.getVectorArray(_data.results.negativeIdealSolution);
     // var _euclidianDistance = _helper.getDistanceArray(
@@ -26,10 +51,33 @@ class PDFProvider {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return [
-            pw.Header(text: "Codas Method Result Sheet"),
+            pw.Header(text: "Taxonomy Method Result Sheet"),
+            pw.Text('Development Attributes'),
+            pw.Table.fromTextArray(data: _developmentAttributeArray),
+            pw.Divider(),
+            pw.Text("Inputs"),
+            pw.Table.fromTextArray(data: _rawMatrixArray),
+            pw.Divider(),
             pw.Text("Normalized Matrix"),
             pw.Table.fromTextArray(data: _normalizedMatrixArray),
             pw.Divider(),
+            pw.Text("Shortest Distance"),
+            pw.Table.fromTextArray(data: _shortestDistanceArray),
+            pw.Divider(),
+            pw.Text("Shortest Distance"),
+            pw.Table.fromTextArray(data: _distanceMapArray),
+            pw.Divider(),
+            pw.Text("Accepted Range"),
+            pw.Table.fromTextArray(data: _acceptendRangeArray),
+            pw.Divider(),
+            pw.Text("Normalized Matrix Filtered"),
+            pw.Table.fromTextArray(data: _normalizedMatrixFilteredArray),
+            pw.Divider(),
+            pw.Text("Ideal Values"),
+            pw.Table.fromTextArray(data: _idealValuesArray),
+            pw.Divider(),
+            pw.Text("Development Pattern"),
+            pw.Table.fromTextArray(data: _developmentPattern)
             // pw.Text("Weighted Matrix"),
             // pw.Table.fromTextArray(data: _weightedMatrixArray),
             // pw.Divider(),
@@ -54,7 +102,7 @@ class PDFProvider {
     final anchor = html.document.createElement('a') as html.AnchorElement
       ..href = url
       ..style.display = 'none'
-      ..download = 'codas_results.pdf';
+      ..download = 'taxonomy_method_results.pdf';
     html.document.body.children.add(anchor);
     anchor.click();
     html.document.body.children.remove(anchor);

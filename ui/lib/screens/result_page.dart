@@ -10,6 +10,7 @@ import 'package:taxonomy_method/bloc/results_bloc.dart';
 import 'package:taxonomy_method/model/taxonomy_input.dart';
 import 'package:taxonomy_method/model/model_results.dart';
 import 'package:flutter/rendering.dart';
+import 'package:taxonomy_method/screens/home_page.dart';
 
 class ResultPage extends StatefulWidget {
   static const routeName = '/results';
@@ -292,6 +293,39 @@ class _ResultPageState extends State<ResultPage> {
     );
   }
 
+  Future<void> _showAlertDialog() async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Warning'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: const <Widget>[
+              Text('All current analysis would be lost'),
+              Text("Do you want to proceed?"),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Ok'),
+            onPressed: () {
+              Navigator.pushNamed(context, HomePage.routeName);
+            },
+          ),
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
   Widget _buildSuccessWidget(ModelResults data) {
     List<String> _alternatives = _tableHelper.getAlternatives(data);
     return Center(
@@ -405,11 +439,22 @@ class _ResultPageState extends State<ResultPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-                onPressed: () => _pdfProvider.createPDF(data),
-                child: Text("Print Results")),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                    onPressed: () => _pdfProvider.createPDF(data),
+                    child: Text("Print Results")),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                    onPressed: () => _showAlertDialog(),
+                    child: Text("Start Again")),
+              )
+            ],
           )
         ],
       ),
@@ -418,7 +463,7 @@ class _ResultPageState extends State<ResultPage> {
 
   List<DataRow> _getRowsFromResults(Map<String, dynamic> results) {
     List<DataRow> _dataRows = [];
-    int ranking = results.length;
+    int ranking = 1;
     results.forEach((key, value) {
       var _value = value.toStringAsFixed(3);
       var _row = DataRow(
@@ -438,8 +483,8 @@ class _ResultPageState extends State<ResultPage> {
         ],
       );
       _dataRows.add(_row);
-      ranking -= 1;
+      ranking += 1;
     });
-    return _dataRows.reversed.toList();
+    return _dataRows.toList();
   }
 }

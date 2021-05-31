@@ -7,6 +7,7 @@ import 'package:taxonomy_method/screens/form_page.dart';
 import 'about_page.dart';
 
 class HomePage extends StatefulWidget {
+  static const routeName = '/';
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -14,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List _isHovering = [false, false, false];
   final _formKey = GlobalKey<FormState>();
-  final _acceptedKey = "123"; //"@amolandoamalandra123";
+  final _acceptedKey = "4M0L4ND0 4 M4L4NDR4";
   final _textEditingController = TextEditingController();
 
   Future<void> _showPassWordDialog() async {
@@ -132,19 +133,28 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       persistentFooterButtons: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              height: 64,
-              child: Image.asset("assets/logos/ime.png"),
-            ),
-            Text(
-                '''"All rights reserved. Non-commercial (academic) use of this software is free.
-The only thing asked in exchange is to cite this software when the results are used in publications ".
-To cite the software: RODRIGUES, Lorran Santos; SANTOS, Marcos dos; GOMES, Carlos Francisco Simões;
-Taxonomy Software Web (v.1). 2021.''')
-          ],
+        FittedBox(
+          fit: BoxFit.scaleDown,
+                  child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: 64,
+                child: Image.asset("assets/logos/ime.png"),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:30),
+                child: Text(
+                  '''
+                  "All rights reserved. Non-commercial (academic) use of this software is free.
+                  The only thing asked in exchange is to cite this software when the results are used in publications".
+                  To cite the software: RODRIGUES, Lorran Santos; SANTOS, Marcos dos; GOMES, Carlos Francisco Simões;Taxonomy Software Web (v.1). 2021.''',
+                  textAlign: TextAlign.justify,
+                  maxLines: 5,
+                ),
+              )
+            ],
+          ),
         ),
       ],
       body: Column(

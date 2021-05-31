@@ -1,6 +1,7 @@
 import 'package:taxonomy_method/model/model_results.dart';
 
 class TableHelper {
+  static const default_value_series = ["key","value"];
   List<String> getAlternatives(ModelResults data) {
     return data.results.developmentAttributes.keys.toList();
   }
@@ -57,6 +58,23 @@ class TableHelper {
       _matrixArray.add(_row);
     });
     return _matrixArray;
+  }
+  
+  List<List<dynamic>> getSeriesArray(Map<String, dynamic> series,{List<String> header = default_value_series,bool ascending = true}) {
+    List<List<dynamic>> seriesArray = [];
+    List<List<dynamic>> results = [];
+    series.forEach((key, value) {
+      seriesArray.add([key, double.parse(value.toString()).toStringAsFixed(3)]);
+    });
+    // if(ascending==true){
+    //   seriesArray.sort((a,b)=>a.last<b.last);
+    // }
+    // else{
+    //   seriesArray.sort((a,b)=>a.last>b.last);
+    // }
+    results.add(header);
+    results.addAll(seriesArray);
+    return results;
   }
 
   List<List<dynamic>> getMatrixArray(
