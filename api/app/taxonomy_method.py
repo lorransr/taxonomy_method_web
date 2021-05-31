@@ -62,6 +62,7 @@ def calculate(m_raw: pd.DataFrame, alternatives: List[str], criterias: List[Crit
     # step 6
     high_limit = development_pattern.mean() + 2 * development_pattern.std()
     development_attribute = development_pattern / high_limit
+    development_attribute.sort_values(inplace=True)
     output = TaxonomyOutput(
         **{
             "raw_matrix": m_raw.to_dict(),
