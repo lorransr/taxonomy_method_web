@@ -1,8 +1,7 @@
 from app.model import ShortestDistance, TaxonomyOutput, Criteria
 import pandas as pd
 import numpy as np
-from scipy.spatial.distance import pdist
-from scipy.spatial.distance import squareform
+from app.distance import pdist,squareform,euclidean
 from typing import List
 import logging
 
@@ -25,7 +24,7 @@ def calculate(m_raw: pd.DataFrame, alternatives: List[str], criterias: List[Crit
     # step 2
     std_matrix = (m_raw - criteria_mean) / criteria_std
     # step 3
-    composite_distance = squareform(pdist(std_matrix))
+    composite_distance = squareform(pdist(std_matrix.values,metric=euclidean),len(std_matrix.values))
 
     composite_distance_df = pd.DataFrame(
         composite_distance, index=alternatives, columns=alternatives

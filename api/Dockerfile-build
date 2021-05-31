@@ -1,0 +1,6 @@
+FROM lambci/lambda:20210129-build-python3.8
+COPY ./app ./app
+ADD requirements.txt .
+USER root
+RUN pip install -r requirements.txt -t .
+RUN zip -rv lambda-docker.zip ./*
