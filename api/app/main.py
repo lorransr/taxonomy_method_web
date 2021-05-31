@@ -5,8 +5,8 @@ from pydantic import BaseModel,validator
 from typing import List
 from enum import Enum
 import pandas as pd
-from . import taxonomy_method
-from .model import TaxonomyInput,CriteriaType,TaxonomyOutput
+from app import taxonomy_method
+from app.model import TaxonomyInput,CriteriaType,TaxonomyOutput
 import logging
 from mangum import Mangum
 
