@@ -4,7 +4,7 @@ FROM debian:latest AS build-env
 # Install flutter dependencies
 RUN apt-get update 
 RUN apt-get install -y curl wget unzip libgconf-2-4 gdb libstdc++6 libglu1-mesa fonts-droid-fallback lib32stdc++6 python3
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git zip
 RUN apt-get clean
 
 # Clone the flutter repo
@@ -25,7 +25,10 @@ RUN flutter config --enable-web
 RUN mkdir /app/
 COPY . /app/
 WORKDIR /app/
-# RUN flutter build web
+
+# building
+RUN flutter build web
+RUN cd build/web/ && zip -rv flutter-web.zip ./*
 
 # # Stage 2 - Create the run-time image
 # FROM nginx
